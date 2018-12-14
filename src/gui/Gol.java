@@ -43,7 +43,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     @Override
     public void paint(Graphics g) {
         paintBackground(g, getWidth(), getHeight());
-        paintCells(g, cells, ALLBITS);
+        paintCells(g, cells, cellLength);
     }
 
     @SuppressWarnings("unchecked")
