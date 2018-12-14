@@ -27,8 +27,17 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         }
     }
 
+    private void playGod(boolean cell) {
+
+    }
+
     private void reproduce() {
-        
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[i].length; j++) {
+                playGod(cells[i][j]);
+            }
+        }
+
     }
 
     @Override
