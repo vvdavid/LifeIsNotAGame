@@ -6,8 +6,10 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.concurrent.ThreadLocalRandom;
+import objects.Paint;
 
-public class GridCreator extends javax.swing.JPanel {
+public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private boolean[][] cells;
     int cellLength = 110;
@@ -20,38 +22,21 @@ public class GridCreator extends javax.swing.JPanel {
         int rows = getHeight() / cellLength;
         int columns = getWidth() / cellLength;
         this.cells = new boolean[rows][columns];
+        initializeCells();
+    }
+
+    private void initializeCells() {
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[i].length; j++) {
+                cells[i][j] = ThreadLocalRandom.current().nextBoolean();
+            }
+        }
     }
 
     @Override
     public void paint(Graphics g) {
-        paintBackground(g);
+        paintBackground(g, getWidth(), getHeight());
         paintCells(g, cells, cellLength);
-    }
-
-    public static void paintCells(Graphics g, boolean[][] cells, int cellLength) {
-
-        int gap = 0;//gap between cells
-        int x = 1, y = 1; //start of grid
-
-        for (boolean[] row : cells) {
-            for (boolean cell : row) {
-                if (cell) {
-                    g.setColor(Color.GREEN);
-                    g.fillRect(x, y, cellLength, cellLength);
-                }
-                g.setColor(Color.BLACK);
-                g.drawRect(x, y, cellLength, cellLength);
-                x += cellLength + gap;
-            }
-            y += cellLength + gap;
-            x -= (cellLength + gap) * cells[0].length;
-        }
-
-    }
-
-    private void paintBackground(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
     }
 
     private void addListeners() {
