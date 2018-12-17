@@ -5,7 +5,7 @@
  */
 package gui;
 
-import java.awt.Dimension;
+import java.awt.Component;
 
 /**
  *
@@ -15,12 +15,13 @@ public class Main extends javax.swing.JFrame {
 
     private GridCreator grid;
     private Gol gol;
+    private int cellLength = 20;
 
     public Main() {
         initComponents();
         setLocationRelativeTo(null);
 
-        this.grid = new GridCreator(father.getSize());
+        this.grid = new GridCreator(father.getSize(), cellLength);
         father.add(grid);
     }
 
@@ -57,7 +58,7 @@ public class Main extends javax.swing.JFrame {
         );
         fatherLayout.setVerticalGroup(
             fatherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 648, Short.MAX_VALUE)
+            .addGap(0, 640, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -80,16 +81,21 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(father, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(19, 19, 19))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        gol = new Gol(father.getSize(), grid.getCells(), grid.cellLength);
-        father.remove(grid);
-        father.add(gol);
+        Component c = father.getComponent(0);
+        father.removeAll();
+        if (c instanceof GridCreator) {
+            gol = new Gol(father.getSize(), grid.getCells(), grid.cellLength);
+            father.add(gol);
+        } else {
+            gol.living = false;
+            father.add(grid);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

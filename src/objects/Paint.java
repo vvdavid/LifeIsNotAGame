@@ -20,7 +20,6 @@ public interface Paint {
     }
 
     public default void paintCells(Graphics g, boolean[][] cells, int cellLength) {
-
         int gap = 0;//gap between cells
         int x = 1, y = 1; //start of grid
 

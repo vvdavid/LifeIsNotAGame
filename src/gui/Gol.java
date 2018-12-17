@@ -2,42 +2,98 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import objects.Paint;
 
 public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
-    private final boolean[][] cells;
+    private boolean[][] cells;
+    private boolean[][] newCells;
     private final int cellLength;
-    private boolean living = true;
+
+    public boolean living = true;
 
     public Gol(Dimension size, boolean[][] cells, int cellLength) {
         initComponents();
         setSize(size);
-        this.cells = cells;
+
+        this.cells = arrCopy(cells);
+        this.newCells = arrCopy(cells);
         this.cellLength = cellLength;
-        new Thread(this).start();
+
+        //print neighbors of clicked cell (debug purposes)
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    int f = e.getY() / cellLength;
+                    int c = e.getX() / cellLength;
+                    System.out.println("vecinos en " + f + "," + c + ": " + neighbors(f, c));
+
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                }
+            }
+
+        });
+
+        //start painting the game!
+        Thread thread = new Thread(this);
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
     }
 
     @Override
     public void run() {
         while (living) {
-            reproduce();
-            sleep(1000 / 60);
+            nextGen();
+            sleep(1000 / 30);
             repaint();
         }
     }
 
-    private void playGod(boolean cell) {
-
-    }
-
-    private void reproduce() {
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[i].length; j++) {
-                playGod(cells[i][j]);
+    private void nextGen() {
+        for (int row = 0; row < cells.length; row++) {
+            for (int column = 0; column < cells[row].length; column++) {
+                playGod(row, column, neighbors(row, column));
             }
         }
+        this.cells = arrCopy(newCells);
+    }
 
+    private int neighbors(int row, int column) {
+        int neighbors = 0;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                try {
+                    if (cells[row + i][column + j]) {
+                        neighbors++;
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
+        return neighbors;
+    }
+
+    private void playGod(int row, int column, int neighbors) {
+        if (cells[row][column]) {
+            if (neighbors < 2) {
+                newCells[row][column] = false;
+            } else if (neighbors == 2 || neighbors == 3) {
+                newCells[row][column] = true;
+            } else if (neighbors > 3) {
+                newCells[row][column] = false;
+            }
+        } else {
+            if (neighbors == 3) {
+                newCells[row][column] = true;
+            }
+        }
     }
 
     @Override
@@ -71,4 +127,11 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         }
     }
 
+    private boolean[][] arrCopy(boolean[][] src) {
+        boolean[][] dest = new boolean[src.length][src[0].length];
+        for (int i = 0; i < src.length; i++) {
+            dest[i] = src[i].clone();
+        }
+        return dest;
+    }
 }

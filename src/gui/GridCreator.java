@@ -1,20 +1,18 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.concurrent.ThreadLocalRandom;
 import objects.Paint;
 
 public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private boolean[][] cells;
-    int cellLength = 110;
+    int cellLength;
 
-    public GridCreator(Dimension panelDimension) {
+    public GridCreator(Dimension panelDimension, int cellLength) {
         initComponents();
         addListeners();
         //set size and set cell number
@@ -22,6 +20,7 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
         int rows = getHeight() / cellLength;
         int columns = getWidth() / cellLength;
         this.cells = new boolean[rows][columns];
+        this.cellLength = cellLength;
         initializeCells();
     }
 
