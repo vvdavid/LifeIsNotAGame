@@ -26,11 +26,11 @@ public interface Paint {
         for (boolean[] row : cells) {
             for (boolean cell : row) {
                 if (cell) {
-                    g.setColor(Color.GREEN);
-                    g.fillRect(x, y, cellLength, cellLength);
+                    g.setColor(Color.RED);
+                    g.fillOval(x, y, cellLength, cellLength);
                 }
-                g.setColor(Color.BLACK);
-                g.drawRect(x, y, cellLength, cellLength);
+//                g.setColor(Color.BLACK);
+//                g.drawRect(x, y, cellLength, cellLength);
                 x += cellLength + gap;
             }
             y += cellLength + gap;
