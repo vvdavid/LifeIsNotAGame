@@ -15,7 +15,7 @@ public class Main extends javax.swing.JFrame {
 
     private GridCreator grid;
     private Gol gol;
-    private int cellLength = 20;
+    private int cellLength = 5;
 
     public Main() {
         initComponents();
