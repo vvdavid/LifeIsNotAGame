@@ -94,6 +94,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
                 newCells[row][column] = true;
             }
         }
+//        repaint(column *  cellLength, row * cellLength, cellLength, cellLength);
     }
 
     @Override
