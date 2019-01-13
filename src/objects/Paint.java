@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
-/**
- *
- * @author Admin
- */
 public interface Paint {
 
     public default void paintBackground(Graphics g, int width, int heigth) {
@@ -20,6 +13,8 @@ public interface Paint {
     }
 
     public default void paintCells(Graphics g, boolean[][] cells, int cellLength) {
+//        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         int gap = 0;//gap between cells
         int x = 1, y = 1; //start of grid
 
