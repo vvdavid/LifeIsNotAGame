@@ -5,18 +5,21 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import objects.Paint;
+import objects.Properties;
 
 public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private boolean[][] cells;
     private boolean[][] newCells;
     int cellLength, gap;
+    int deaths = 0, births = 0, generations = 0;
+    private final Properties props;
 
     public boolean runningThread = true;
     Thread reproduce = new Thread(this);
-    private final int estimatedFps = 15;
+    private final int estimatedFps = 5;
 
-    public Gol(Dimension size, boolean[][] cells, int cellLength, int gap) {
+    public Gol(Dimension size, boolean[][] cells, int cellLength, int gap, Properties props) {
         super(true);
         initComponents();
         setSize(size);
@@ -25,6 +28,8 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         newCells = arrCopy(cells);
         this.cellLength = cellLength;
         this.gap = gap;
+        this.props = props;
+
         //print neighbors of clicked cell (debug purposes)
         addMouseListener(new MouseAdapter() {
             @Override
@@ -40,7 +45,6 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
         //start painting the game!
         reproduce.setPriority(Thread.MAX_PRIORITY);
-        reproduce.start();
     }
 
     @Override
@@ -54,11 +58,12 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private void nextGen() {
         for (int row = 0; row < cells.length; row++) {
-            for (int column = 0; column < cells[row].length; column++) {
+            for (int column = 0; column < cells[0].length; column++) {
                 playGod(row, column, neighbors(row, column));
             }
         }
         cells = arrCopy(newCells);
+        props.addGeneration(generations++);
     }
 
     private int neighbors(int row, int column) {
@@ -80,20 +85,13 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     }
 
     private void playGod(int row, int column, int neighbors) {
-        if (cells[row][column]) {
-            if (neighbors < 2) {
-                newCells[row][column] = false;
-            } else if (neighbors == 2 || neighbors == 3) {
-                newCells[row][column] = true;
-            } else if (neighbors > 3) {
-                newCells[row][column] = false;
-            }
-        } else {
-            if (neighbors == 3) {
-                newCells[row][column] = true;
-            }
+        if (cells[row][column] && (neighbors < 2 || neighbors > 3)) {
+            newCells[row][column] = false;
+            props.addDeath(deaths++);
+        } else if (neighbors == 3) {
+            newCells[row][column] = true;
+            props.addBirth(births++);
         }
-//        repaint(column *  cellLength, row * cellLength, cellLength, cellLength);
     }
 
     @Override

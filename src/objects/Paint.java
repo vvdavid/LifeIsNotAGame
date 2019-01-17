@@ -8,7 +8,10 @@ import javax.swing.UIManager;
 
 public interface Paint {
 
+    public final static Color c = UIManager.getColor("Panel.background");
+
     public default void paintBackground(Graphics g, int width, int heigth) {
+//        g.setColor(c);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, heigth);
     }
