@@ -10,13 +10,13 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private boolean[][] cells;
     private boolean[][] newCells;
-    int cellLength;
+    int cellLength, gap;
 
     public boolean runningThread = true;
     Thread reproduce = new Thread(this);
     private final int estimatedFps = 15;
 
-    public Gol(Dimension size, boolean[][] cells, int cellLength) {
+    public Gol(Dimension size, boolean[][] cells, int cellLength, int gap) {
         super(true);
         initComponents();
         setSize(size);
@@ -24,7 +24,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         this.cells = arrCopy(cells);
         newCells = arrCopy(cells);
         this.cellLength = cellLength;
-
+        this.gap = gap;
         //print neighbors of clicked cell (debug purposes)
         addMouseListener(new MouseAdapter() {
             @Override
@@ -99,7 +99,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     @Override
     public void paint(Graphics g) {
         paintBackground(g, getWidth(), getHeight());
-        paintCells(g, cells, cellLength);
+        paintCells(g, cells, cellLength, gap);
     }
 
     @SuppressWarnings("unchecked")

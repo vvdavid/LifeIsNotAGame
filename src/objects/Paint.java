@@ -13,10 +13,9 @@ public interface Paint {
         g.fillRect(0, 0, width, heigth);
     }
 
-    public default void paintCells(Graphics g, boolean[][] cells, int cellLength) {
+    public default void paintCells(Graphics g, boolean[][] cells, int cellLength, int gap) {
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int gap = 0;//gap between cells
         final int x = 1, y = 1;
         int actualX = 1, actualY = 1; //start of grid
 
@@ -26,8 +25,6 @@ public interface Paint {
                     g.setColor(Color.RED);
                     g.fillOval(actualX, actualY, cellLength, cellLength);
                 }
-//                g.setColor(Color.BLACK);
-//                g.drawRect(x, y, cellLength, cellLength);
                 actualX += cellLength + gap;
             }
             actualY += cellLength + gap;

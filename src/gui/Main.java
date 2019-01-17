@@ -4,12 +4,15 @@ import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Main extends javax.swing.JFrame {
 
     private GridCreator gridCreator;
     private Gol gameBoard;
     private boolean playing;
+    private int gap;
 
     public Main() {
         initComponents();
@@ -19,9 +22,9 @@ public class Main extends javax.swing.JFrame {
         //initialize grid and game board
         int cellLength = getCellLength();
         Dimension fatherDimension = father.getSize();
-
-        gridCreator = new GridCreator(fatherDimension, cellLength);
-        gameBoard = new Gol(fatherDimension, gridCreator.getCells(), cellLength);
+        gap = (int) jSpinnerGap.getValue();
+        gridCreator = new GridCreator(fatherDimension, cellLength, gap);
+        gameBoard = new Gol(fatherDimension, gridCreator.getCells(), cellLength, gap);
 
         father.add(gridCreator);
 
@@ -32,6 +35,11 @@ public class Main extends javax.swing.JFrame {
                 gridCreator.setSize(father.getSize());
                 gridCreator.updateGrid();
             }
+        });
+        //update gap field
+        jSpinnerGap.addChangeListener(e -> {
+            this.gap = gridCreator.gap = (int) jSpinnerGap.getValue();
+            gridCreator.updateGrid();
         });
     }
 
@@ -44,6 +52,8 @@ public class Main extends javax.swing.JFrame {
         jSpinner1 = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jSpinnerGap = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Life is a game");
@@ -82,6 +92,10 @@ public class Main extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Circle", "Square" }));
 
+        jLabel3.setText("Gap");
+
+        jSpinnerGap.setModel(new javax.swing.SpinnerNumberModel(10, 0, 50, 1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,7 +111,11 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinnerGap, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -112,7 +130,9 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jSpinnerGap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(father, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -124,16 +144,16 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         father.removeAll();
-                
+
         if (playing) {
             gameBoard.runningThread = false;
             father.add(gridCreator);
             father.repaint();
         } else {
-            gameBoard = new Gol(father.getSize(), gridCreator.getCells(), getCellLength());
+            gameBoard = new Gol(father.getSize(), gridCreator.getCells(), getCellLength(), gap);
             father.add(gameBoard);
         }
-        
+
         playing = !playing;
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -161,6 +181,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinnerGap;
     // End of variables declaration//GEN-END:variables
 }

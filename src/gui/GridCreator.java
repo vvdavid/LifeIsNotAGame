@@ -10,22 +10,22 @@ import objects.Paint;
 public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private boolean[][] cells;
-    public int cellLength;
+    public int cellLength, gap;
 
-    public GridCreator(Dimension panelDimension, int cellLength) {
+    public GridCreator(Dimension panelDimension, int cellLength, int gap) {
         super(true);
         initComponents();
         addListeners();
         //set size and set cell number
         setSize(panelDimension);
         this.cellLength = cellLength;
+        this.gap = gap;
         updateGrid();
-        initializeCells();
     }
 
     public void updateGrid() {
-        int rows = getHeight() / cellLength;
-        int columns = getWidth() / cellLength;
+        int rows = getHeight() / (cellLength + gap);
+        int columns = getWidth() / (cellLength + gap);
         this.cells = new boolean[rows][columns];
         initializeCells();
         repaint();
@@ -42,7 +42,7 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
     @Override
     public void paint(Graphics g) {
         paintBackground(g, getWidth(), getHeight());
-        paintCells(g, cells, cellLength);
+        paintCells(g, cells, cellLength, gap);
     }
 
     private void addListeners() {
@@ -52,13 +52,12 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
                 invierte(e);
             }
         });
-
     }
 
     private void invierte(MouseEvent e) {
         try {
-            int row = e.getY() / (cellLength);
-            int column = e.getX() / (cellLength);
+            int row = e.getY() / (cellLength + gap);
+            int column = e.getX() / (cellLength + gap);
             cells[row][column] = !cells[row][column];
         } catch (ArrayIndexOutOfBoundsException ex) {
         }
