@@ -4,23 +4,25 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import objects.Paint;
 
 public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private boolean[][] cells;
     private boolean[][] newCells;
-    private final int cellLength;
+    int cellLength;
 
-    public boolean living = true;
+    public boolean runningThread = true;
+    Thread reproduce = new Thread(this);
+    private final int estimatedFps = 15;
 
     public Gol(Dimension size, boolean[][] cells, int cellLength) {
+        super(true);
         initComponents();
         setSize(size);
 
         this.cells = arrCopy(cells);
-        this.newCells = arrCopy(cells);
+        newCells = arrCopy(cells);
         this.cellLength = cellLength;
 
         //print neighbors of clicked cell (debug purposes)
@@ -31,24 +33,21 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
                     int f = e.getY() / cellLength;
                     int c = e.getX() / cellLength;
                     System.out.println("vecinos en " + f + "," + c + ": " + neighbors(f, c));
-
                 } catch (ArrayIndexOutOfBoundsException ex) {
                 }
             }
-
         });
 
         //start painting the game!
-        Thread thread = new Thread(this);
-        thread.setPriority(Thread.MAX_PRIORITY);
-        thread.start();
+        reproduce.setPriority(Thread.MAX_PRIORITY);
+        reproduce.start();
     }
 
     @Override
     public void run() {
-        while (living) {
+        while (runningThread) {
             nextGen();
-            sleep(1000 / 30);
+            sleep(1000 / estimatedFps);
             repaint();
         }
     }
@@ -59,7 +58,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
                 playGod(row, column, neighbors(row, column));
             }
         }
-        this.cells = arrCopy(newCells);
+        cells = arrCopy(newCells);
     }
 
     private int neighbors(int row, int column) {
@@ -134,5 +133,15 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
             dest[i] = src[i].clone();
         }
         return dest;
+    }
+
+    /**
+     * Update cells and newCells of this gol gameboard
+     *
+     * @param cells cells to assign
+     */
+    public void setCells(boolean[][] cells) {
+        this.cells = cells;
+        newCells = cells;
     }
 }

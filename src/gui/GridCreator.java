@@ -10,18 +10,25 @@ import objects.Paint;
 public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private boolean[][] cells;
-    int cellLength;
+    public int cellLength;
 
     public GridCreator(Dimension panelDimension, int cellLength) {
+        super(true);
         initComponents();
         addListeners();
         //set size and set cell number
         setSize(panelDimension);
+        this.cellLength = cellLength;
+        updateGrid();
+        initializeCells();
+    }
+
+    public void updateGrid() {
         int rows = getHeight() / cellLength;
         int columns = getWidth() / cellLength;
         this.cells = new boolean[rows][columns];
-        this.cellLength = cellLength;
         initializeCells();
+        repaint();
     }
 
     private void initializeCells() {
@@ -50,8 +57,8 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private void invierte(MouseEvent e) {
         try {
-            int row = e.getY() / cellLength;
-            int column = e.getX() / cellLength;
+            int row = e.getY() / (cellLength);
+            int column = e.getX() / (cellLength);
             cells[row][column] = !cells[row][column];
         } catch (ArrayIndexOutOfBoundsException ex) {
         }
@@ -60,15 +67,17 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        setBorder(new javax.swing.border.MatteBorder(null));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 358, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 304, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
