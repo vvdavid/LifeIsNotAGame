@@ -30,7 +30,6 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         this.gap = gap;
         this.props = props;
 
-        //start painting the game!
         reproduce.setPriority(Thread.MAX_PRIORITY);
     }
 
