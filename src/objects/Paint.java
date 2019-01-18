@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.swing.UIManager;
 
 public interface Paint {
 
