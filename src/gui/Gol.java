@@ -30,19 +30,6 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         this.gap = gap;
         this.props = props;
 
-        //print neighbors of clicked cell (debug purposes)
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    int f = e.getY() / cellLength;
-                    int c = e.getX() / cellLength;
-                    System.out.println("vecinos en " + f + "," + c + ": " + neighbors(f, c));
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                }
-            }
-        });
-
         //start painting the game!
         reproduce.setPriority(Thread.MAX_PRIORITY);
     }
