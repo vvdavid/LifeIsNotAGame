@@ -17,7 +17,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     public boolean runningThread = true;
     Thread reproduce = new Thread(this);
-    private final int estimatedFps = 5;
+    private final int estimatedFps = 25;
 
     public Gol(Dimension size, boolean[][] cells, int cellLength, int gap, Properties props) {
         super(true);
