@@ -1,8 +1,13 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -18,6 +23,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
+        loadIcons();
         setLocationRelativeTo(null);
         playing = false;
 
@@ -274,9 +280,21 @@ public class Main extends javax.swing.JFrame {
         } catch (Exception e) {
             System.err.println(e);
         }
-        new Main().setVisible(true);
+        Main frame = new Main();
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
     }
 
+    private void loadIcons() {
+        ArrayList<Image> icons = new ArrayList();
+        String folderRoute = "src/img/";
+        File folder = new File(folderRoute);
+        for (String iconFileName : folder.list()) {
+            icons.add(new ImageIcon(folderRoute + iconFileName).getImage());
+        }
+        setIconImages(icons);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel father;
     private javax.swing.JButton jButton1;
