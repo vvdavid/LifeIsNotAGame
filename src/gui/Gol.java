@@ -2,18 +2,19 @@ package gui;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Point;
+import java.util.ArrayList;
 import objects.Paint;
 import objects.Properties;
 
 public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private boolean[][] cells;
-    private boolean[][] newCells;
     int cellLength, gap, shape;
     int deaths = 0, births = 0, generations = 0;
     private final Properties props;
+    private final ArrayList<Point> toLive = new ArrayList<>();
+    private final ArrayList<Point> toDie = new ArrayList<>();
 
     public boolean runningThread = true;
     Thread reproduce = new Thread(this);
@@ -25,7 +26,6 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         setSize(size);
 
         this.cells = arrCopy(cells);
-        newCells = arrCopy(cells);
         this.cellLength = cellLength;
         this.gap = gap;
         this.shape = shape;
@@ -49,7 +49,18 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
                 playGod(row, column, neighbors(row, column));
             }
         }
-        cells = arrCopy(newCells);
+
+        toDie.forEach((p) -> {
+            cells[p.x][p.y] = false;
+        });
+
+        toLive.forEach((p) -> {
+            cells[p.x][p.y] = true;
+        });
+
+        toDie.clear();
+        toLive.clear();
+
         props.addGeneration(generations++);
     }
 
@@ -73,11 +84,10 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private void playGod(int row, int column, int neighbors) {
         if (cells[row][column] && (neighbors < 2 || neighbors > 3)) {
-            newCells[row][column] = false;
+            toDie.add(new Point(row, column));
             props.addDeath(deaths++);
-
         } else if (neighbors == 3) {
-            newCells[row][column] = true;
+            toLive.add(new Point(row, column));
             props.addBirth(births++);
         }
     }
@@ -128,6 +138,5 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
      */
     public void setCells(boolean[][] cells) {
         this.cells = cells;
-        newCells = cells;
     }
 }
