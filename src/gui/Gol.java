@@ -21,7 +21,6 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     private final int estimatedFps = 25;
 
     public Gol(Dimension size, boolean[][] cells, int cellLength, int gap, int shape, Properties props) {
-//        super(true);
         initComponents();
         setSize(size);
 
