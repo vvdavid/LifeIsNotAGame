@@ -11,7 +11,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
 
     private boolean[][] cells;
     private boolean[][] newCells;
-    int cellLength, gap;
+    int cellLength, gap, shape;
     int deaths = 0, births = 0, generations = 0;
     private final Properties props;
 
@@ -19,8 +19,8 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     Thread reproduce = new Thread(this);
     private final int estimatedFps = 25;
 
-    public Gol(Dimension size, boolean[][] cells, int cellLength, int gap, Properties props) {
-        super(true);
+    public Gol(Dimension size, boolean[][] cells, int cellLength, int gap, int shape, Properties props) {
+//        super(true);
         initComponents();
         setSize(size);
 
@@ -28,6 +28,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         newCells = arrCopy(cells);
         this.cellLength = cellLength;
         this.gap = gap;
+        this.shape = shape;
         this.props = props;
 
         reproduce.setPriority(Thread.MAX_PRIORITY);
@@ -74,6 +75,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
         if (cells[row][column] && (neighbors < 2 || neighbors > 3)) {
             newCells[row][column] = false;
             props.addDeath(deaths++);
+
         } else if (neighbors == 3) {
             newCells[row][column] = true;
             props.addBirth(births++);
@@ -83,7 +85,7 @@ public class Gol extends javax.swing.JPanel implements Runnable, Paint {
     @Override
     public void paint(Graphics g) {
         paintBackground(g, getWidth(), getHeight());
-        paintCells(g, cells, cellLength, gap);
+        paintCells(g, cells, cellLength, gap, shape);
     }
 
     @SuppressWarnings("unchecked")

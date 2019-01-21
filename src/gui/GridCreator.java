@@ -10,9 +10,9 @@ import objects.Paint;
 public class GridCreator extends javax.swing.JPanel implements Paint {
 
     private boolean[][] cells;
-    public int cellLength, gap;
+    public int cellLength, gap, shape;
 
-    public GridCreator(Dimension panelDimension, int cellLength, int gap) {
+    public GridCreator(Dimension panelDimension, int cellLength, int gap, int shape) {
         super(true);
         initComponents();
         addListeners();
@@ -20,6 +20,7 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
         setSize(panelDimension);
         this.cellLength = cellLength;
         this.gap = gap;
+        this.shape = shape;
         updateGrid();
     }
 
@@ -42,7 +43,7 @@ public class GridCreator extends javax.swing.JPanel implements Paint {
     @Override
     public void paint(Graphics g) {
         paintBackground(g, getWidth(), getHeight());
-        paintCells(g, cells, cellLength, gap);
+        paintCells(g, cells, cellLength, gap, shape);
     }
 
     private void addListeners() {

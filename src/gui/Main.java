@@ -13,7 +13,7 @@ public class Main extends javax.swing.JFrame {
     private GridCreator gridCreator;
     private Gol gameBoard;
     private boolean playing;
-    private int gap;
+    private int gap, shape;
     private Properties props;
 
     public Main() {
@@ -28,8 +28,8 @@ public class Main extends javax.swing.JFrame {
 
         gap = (int) jSpinnerGap.getValue();
 
-        gridCreator = new GridCreator(fatherDimension, cellLength, gap);
-        gameBoard = new Gol(fatherDimension, gridCreator.getCells(), cellLength, gap, props);
+        gridCreator = new GridCreator(fatherDimension, cellLength, gap, shape);
+        gameBoard = new Gol(fatherDimension, gridCreator.getCells(), cellLength, gap, shape, props);
         father.add(gridCreator);
 
         //update grid when resizing jframe
@@ -89,6 +89,11 @@ public class Main extends javax.swing.JFrame {
         jLabel2.setText("Form");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Circle", "Square" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Gap");
 
@@ -241,7 +246,7 @@ public class Main extends javax.swing.JFrame {
             father.add(gridCreator);
             father.repaint();
         } else {
-            gameBoard = new Gol(father.getSize(), gridCreator.getCells(), getCellLength(), gap, props);
+            gameBoard = new Gol(father.getSize(), gridCreator.getCells(), getCellLength(), gap, shape, props);
             gameBoard.reproduce.start();
             father.add(gameBoard);
         }
@@ -253,6 +258,11 @@ public class Main extends javax.swing.JFrame {
         gridCreator.cellLength = (int) jSpinner1.getValue();
         gridCreator.updateGrid();
     }//GEN-LAST:event_jSpinner1StateChanged
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        shape = gridCreator.shape = jComboBox1.getSelectedIndex();
+        gridCreator.updateGrid();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private int getCellLength() {
         return (int) jSpinner1.getValue();
